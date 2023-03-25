@@ -21,14 +21,12 @@ COPY /usr/local/sbin/ /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/sail
 
 # -- Packages
-RUN <<EOT
-    apt update -y
-    apt install git -y
-    apt install vim -y 
-    apt install nvim -y 
-    apt install nano -y 
-    apt install curl -y
-EOT 
+RUN apt update -y
+RUN apt install git -y
+RUN apt install vim -y
+RUN apt install nvim -y
+RUN apt install nano -y
+RUN apt install curl -y
 
 
 # -- Post -- #
