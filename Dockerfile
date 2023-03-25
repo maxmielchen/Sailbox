@@ -9,7 +9,6 @@ RUN apt install openssh-server -y
 RUN apt clean 
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
 # Load entrypoint
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
