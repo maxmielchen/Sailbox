@@ -7,6 +7,7 @@ create()
         echo "User already exist!"
     else
         read -p "Password: " -s password
+        echo 
         read -p "Root $username (y/n): " yn
         adduser --disabled-password --gecos '' $username
         echo "${username}:${password}" | chpasswd
