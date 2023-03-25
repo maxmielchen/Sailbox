@@ -1,0 +1,21 @@
+#!/bin/bash
+
+create()
+{
+    read -p "Username: " username
+    if id $username &>/dev/null; then
+        echo "User already exist!"
+    else
+        read -p -s "Password: " password
+        read -p "Root $username (y/n): " yn
+        adduser --disabled-password --gecos '' $username
+        echo "${username}:${password}" | chpasswd
+        if [$yn in [Yy]] 
+        then
+            usermod -G root $username
+            usermod -aG sudo $username
+        fi
+        mkdir /home/$username/projects
+        echo 'AllowUsers $username' >> /etc/ssh/sshd_config
+    fi
+}
