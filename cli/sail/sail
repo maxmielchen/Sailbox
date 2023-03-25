@@ -7,11 +7,11 @@ case $1 in
                 case $2 in
                         "create")
                                 source user/create
-                                create()
+                                create
                                 ;;
                         "delete")   
                                 source user/delete
-                                delete()
+                                delete
                                 ;;
                         *)
                                 echo "create, delete, ..."
