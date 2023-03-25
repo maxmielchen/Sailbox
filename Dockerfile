@@ -17,8 +17,8 @@ COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 # Sail-CLI
-COPY /cli/sail/ /cli/
-RUN chmod +x /cli/sail
+COPY /usr/local/sbin/ /usr/local/sbin/
+RUN chmod +x /usr/local/sbin/sail
 
 
 # -- Post -- #
@@ -30,5 +30,4 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # -- Setup -- #
 EXPOSE 22
-WORKDIR /cli
 ENTRYPOINT ["/entrypoint.sh"]

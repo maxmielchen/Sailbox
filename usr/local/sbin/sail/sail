@@ -6,11 +6,11 @@ case $1 in
     "user")
                 case $2 in
                         "create")
-                                source user/create
+                                source /usr/local/sbin/user/create
                                 create
                                 ;;
                         "delete")   
-                                source user/delete
+                                source /usr/local/sbin/user/delete
                                 delete
                                 ;;
                         *)
