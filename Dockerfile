@@ -20,6 +20,7 @@ RUN chmod +x /entrypoint.sh
 COPY /cli/sail/ /cli/
 RUN chmod +x /cli/sail
 
+
 # -- Post -- #
 
 # Remove temp
