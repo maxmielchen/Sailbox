@@ -24,7 +24,7 @@ RUN chmod +x /usr/local/sbin/sail
 RUN apt update -y
 RUN apt install git -y
 RUN apt install vim -y
-RUN apt install nvim -y
+RUN apt install neovim -y
 RUN apt install nano -y
 RUN apt install curl -y
 
