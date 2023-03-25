@@ -1,0 +1,12 @@
+#!/bin/bash
+
+delete()
+{
+    read -p "Username: " username
+    if id $username &>/dev/null; then
+        deluser --remove-all-files $username
+        sed -i "/AllowUsers $username/d" /etc/ssh/sshd_config
+    else
+        echo "User does not exist!"
+    fi
+}

@@ -16,6 +16,11 @@ RUN apt update -y && apt install sudo -y
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
+# Sail-CLI
+COPY /cli/sail/ /cli/
+RUN chmod +x /cli/sail
+
+
 # -- Post -- #
 
 # Remove temp
@@ -24,6 +29,6 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # -- Setup -- #
-
 EXPOSE 22
+WORKDIR /cli
 ENTRYPOINT ["/entrypoint.sh"]
