@@ -6,7 +6,7 @@ create()
     if id $username &>/dev/null; then
         echo "User already exist!"
     else
-        read -p -s "Password: " password
+        read -p "Password: " -s password
         read -p "Root $username (y/n): " yn
         adduser --disabled-password --gecos '' $username
         echo "${username}:${password}" | chpasswd
@@ -17,5 +17,6 @@ create()
         fi
         mkdir /home/$username/projects
         echo 'AllowUsers $username' >> /etc/ssh/sshd_config
+        /etc/init.d/ssh stop
     fi
 }
