@@ -1,0 +1,21 @@
+#!/bin/bash
+
+$1
+
+case $1 in
+    "user")
+            case $2 in
+            "create")
+                        source user/create
+                        create()
+                        ;;
+            "delete")   
+                        source user/delete
+                        delete()
+                        ;;
+            esac
+            ;;
+    *)
+            echo "user, ..."
+            ;;
+esac
