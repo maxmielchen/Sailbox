@@ -17,7 +17,7 @@ COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 # Sail-CLI
-COPY /cli/sail/ /usr/local/sbin/
+COPY /usr/local/sbin/ /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/sail
 
 
