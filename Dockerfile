@@ -25,7 +25,8 @@ RUN apt update -y \
     && apt install git -y \
     && apt install vim -y \
     && apt install nvim -y \
-    && apt install nano -y 
+    && apt install nano -y \
+    && apt install curl -y
 
 # -- Post -- #
 
