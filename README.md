@@ -6,8 +6,8 @@ Sailbox is a Docker image that simplifies the process of setting up a remote dev
 
 Create instance 
 ```Bash
-docker pull ghcr.io/maxmielchen/sailbox:latest
-docker run --name box -p 201:22 ghcr.io/maxmielchen/sailbox:latest
+docker pull ghcr.io/maxmielchen/sailbox:latest && docker image tag ghcr.io/maxmielchen/sailbox:latest sailbox:latest
+docker run --name box -p 201:22 sailbox:latest
 ```
 
 Add user
