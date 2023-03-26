@@ -21,7 +21,7 @@ docker run --name box -p 201:22 -d sailbox:latest
 
 Add user
 ```Bash
-docker exec box -it sail user create
+docker exec -it box sail user create
 ```
 
 Restart instance
