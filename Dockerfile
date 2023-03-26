@@ -12,6 +12,14 @@ COPY /etc/ssh/sshd_config /etc/ssh/
 # Install Sudo
 RUN apt update -y && apt install sudo -y
 
+# Install Packages
+RUN apt update -y
+RUN apt install git -y
+RUN apt install vim -y
+RUN apt install neovim -y
+RUN apt install nano -y
+RUN apt install curl -y
+
 # Load entrypoint
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
@@ -19,14 +27,6 @@ RUN chmod +x /entrypoint.sh
 # Sail-CLI
 COPY /usr/local/sbin/ /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/sail
-
-# -- Packages
-RUN apt update -y
-RUN apt install git -y
-RUN apt install vim -y
-RUN apt install neovim -y
-RUN apt install nano -y
-RUN apt install curl -y
 
 
 # -- Post -- #
