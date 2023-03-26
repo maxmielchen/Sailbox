@@ -3,8 +3,5 @@ PermitRootLogin yes
 LogLevel INFO
 UsePAM yes
 X11Forwarding yes
-PrintMotd no
-Subsystem    sftp    /usr/lib/ssh/sftp-server
-Match Group root 
-    ChrootDirectory /home
-    ForceCommand internal-sftp
+PrintMotd yes
+Subsystem sftp /usr/lib/ssh/sftp-server
