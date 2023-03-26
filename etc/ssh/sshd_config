@@ -3,5 +3,5 @@ PermitRootLogin yes
 LogLevel INFO
 UsePAM yes
 X11Forwarding yes
-PrintMotd yes
+PrintMotd no
 Subsystem sftp /usr/lib/ssh/sftp-server

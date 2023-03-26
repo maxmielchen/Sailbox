@@ -7,7 +7,7 @@ delete()
         deluser --remove-all-files $username
         sed -i """
 AllowUsers $username
-Match User USERNAME
+Match User $username
     ChrootDirectory /home/$username
         """ /etc/ssh/sshd_config
     else

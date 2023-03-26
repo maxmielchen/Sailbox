@@ -19,7 +19,7 @@ create()
         mkdir /home/$username/projects
         echo """
 AllowUsers $username
-Match User USERNAME
+Match User $username
     ChrootDirectory /home/$username
         """ >> /etc/ssh/sshd_config
 
