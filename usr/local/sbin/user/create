@@ -17,6 +17,7 @@ create()
             usermod -aG sudo $username
         fi
         mkdir /home/$username/projects
+        chown -R -c $username /home/$username
         echo """
 AllowUsers $username
 Match User $username
