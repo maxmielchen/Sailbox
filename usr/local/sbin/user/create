@@ -17,7 +17,13 @@ create()
             usermod -aG sudo $username
         fi
         mkdir /home/$username/projects
-        echo 'AllowUsers $username' >> /etc/ssh/sshd_config
+        echo """
+AllowUsers $username
+Match User USERNAME
+    ChrootDirectory /home/$username
+        """ >> /etc/ssh/sshd_config
+
+
         /etc/init.d/ssh stop
     fi
 }
