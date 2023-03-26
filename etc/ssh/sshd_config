@@ -1,5 +1,6 @@
 Port 22
 PermitRootLogin yes
+LogLevel INFO
 UsePAM yes
 X11Forwarding yes
 PrintMotd no
