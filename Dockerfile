@@ -1,3 +1,20 @@
+# -- SAIL-CLI -- #
+FROM rust:1.68.2 AS sailcli
+
+# Mirror source
+COPY /sail /sail
+RUN cargo build
+
+# Build source
+WORKDIR /sail
+RUN cargo build --release
+
+# Place Unix Executable
+RUN cp /sail/target/release/sail /usr/local/sbin/
+
+
+
+# -- SAILBOX -- #
 FROM ubuntu:jammy
 
 # -- Configuration -- #
@@ -25,7 +42,7 @@ COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 # Sail-CLI
-COPY /usr/local/sbin/ /usr/local/sbin/
+COPY --from=sailcli /usr/local/sbin/sail /usr/local/sbin/
 RUN chmod +x /usr/local/sbin/sail
 
 
