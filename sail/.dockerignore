@@ -1,4 +1,3 @@
 Cargo.lock
 .gitignore
-# Add in production
-#target
+target
