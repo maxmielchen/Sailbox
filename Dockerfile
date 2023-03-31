@@ -1,5 +1,5 @@
 # -- SAIL-CLI -- #
-FROM rust:1.68.2 AS sailcli
+FROM rustlang/rust:nightly AS sailcli
 
 # Mirror source
 COPY /sail /sail
