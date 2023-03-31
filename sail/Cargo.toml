@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 clap = "4.2.1"
+rust-apt = "0.5.1"
