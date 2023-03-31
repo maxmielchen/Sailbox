@@ -3,7 +3,6 @@ FROM rust:1.68.2 AS sailcli
 
 # Mirror source
 COPY /sail /sail
-RUN cargo build
 
 # Build source
 WORKDIR /sail
