@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-    <option name="command" value="run --package Sailbox --bin Sailbox" />
-    <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+  <configuration default="false" name="Build - Rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+    <option name="command" value="build --release" />
+    <option name="workingDirectory" value="file://$PROJECT_DIR$/sail" />
     <option name="emulateTerminal" value="false" />
     <option name="channel" value="DEFAULT" />
     <option name="requiredFeatures" value="true" />
