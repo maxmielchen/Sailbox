@@ -3,41 +3,46 @@ use std::process::{Command, Stdio};
 use std::io::Write;
 use std::fs;
 
-pub fn add_user(&username : String, password: String) -> Result<(), Vec<str>>
+pub fn add_user(username : &String, password: &String) -> Result<(), &'static str>
 {
     // Add user
-    Command::new("adduser")
+    match Command::new("adduser")
         .arg("--disabled-password")
         .arg("--gecos")
         .arg("''")
         .arg(&username)
-        .output().unwrap_or_else(
-        {
-            Err("Could not create user!")
-        });
+        .output() {
+        Ok(output) => output,
+        Err(_) => return Err("Could not create user!")
+    };
 
     // User set password
-    Command::new("chpasswd")
+    match match Command::new("chpasswd")
         .stdin(Stdio::piped())
         .stdout(Stdio::null())
         .stderr(Stdio::inherit())
-        .spawn().unwrap_or_else({
-        Command::new("deluser")
-            .arg("--remove-home")
-            .arg(&username)
-            .output().unwrap();
-        Err("Could not create user!")
-    })
+        .spawn() {
+            Ok(output) => output,
+            Err(_) => {
+                Command::new("deluser")
+                    .arg("--remove-home")
+                    .arg(&username)
+                    .output().unwrap();
+                return Err("Could not create user!")
+            }
+        }
         .stdin
         .unwrap()
-        .write_all(format!("{}:{}", &username, &password).as_bytes())
-        .unwrap_or_else({
+        .write_all(format!("{}:{}", &username, &password).as_bytes()) {
+            Ok(output) => output,
+            Err(_) => {
             Command::new("deluser")
                 .arg("--remove-home")
                 .arg(&username)
                 .output().unwrap();
-            Err("Could not create user!")
-        })
+            return Err("Could not create user!")
+        }
+    }
     ;
 
     // Add user to ssh config
@@ -61,47 +66,48 @@ pub fn add_user(&username : String, password: String) -> Result<(), Vec<str>>
     return Ok(())
 }
 
-pub fn root_user(&username : String) -> Result<(), Vec<str>>
+pub fn root_user(username : &String) -> Result<(), &'static str>
 {
-    Command::new("usermod")
+    match Command::new("usermod")
         .arg("-G")
         .arg("root")
         .arg(&username)
-        .output()
-        .unwrap_or_else({
-            Err(format!("Could not root {}!", &username))
-        });
-    Ok(())
+        .output() {
+            Ok(output) => output,
+            Err(_) => return Err("Could not root")
+        };
+    return Ok(())
 }
 
-pub fn sudo_user(&username : String) -> Result<(), Vec<str>>
+pub fn sudo_user(username : &String) -> Result<(), &'static str>
 {
-    Command::new("usermod")
+    match Command::new("usermod")
         .arg("-aG")
         .arg("sudo")
         .arg(&username)
-        .output()
-        .unwrap_or_else({
-            Err(format!("Could not give sudo rights to {}!", &username))
-        });
-    Ok(())
+        .output() {
+            Ok(output) => output,
+            Err(_) => return Err("Could not give sudo rights")
+        };
+    return Ok(())
 }
 
-pub fn delete_user(&username : String) -> Result<(), Vec<str>>
+pub fn delete_user(username : &String) -> Result<(), &'static str>
 {
-    Command::new("deluser")
+    match Command::new("deluser")
         .arg("--remove-home")
         .arg(&username)
-        .output().unwrap_or_else({
-            Err(format!("Could not delete {}!", username))
-        });
-    Command::new("sed")
+        .output() {
+            Ok(output) => output,
+            Err(_) => return Err("Could not delete")
+    };
+    match Command::new("sed")
         .arg("-i")
         .arg(format!("/^AllowUsers {}/d", &username))
         .arg("/etc/ssh/sshd_config")
-        .output()
-        .unwrap_or_else({
-            Err(format!("Could not remove {} from SSH config!", &username))
-        });
-    Ok(())
+        .output() {
+            Ok(output) => output,
+            Err(_) => return Err("Could not remove from SSH-Server")
+    };
+    return Ok(())
 }
