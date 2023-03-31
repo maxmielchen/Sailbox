@@ -7,7 +7,9 @@ if [ ! -e $INIT ]; then
         ssh-keygen -A
         echo "-- Start SSH Server --"
         /usr/sbin/sshd -D
+        echo "-- Stopped SSH Server --"
 else
         echo "-- Start SSH Server --"
         /usr/sbin/sshd -D
+        echo "-- Stopped SSH Server --"
 fi
