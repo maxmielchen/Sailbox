@@ -47,7 +47,7 @@ RUN chmod +x /usr/local/sbin/sail
 
 # -- Post -- #
 
-# Remove temp
+# Remove temporary
 RUN apt clean 
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
