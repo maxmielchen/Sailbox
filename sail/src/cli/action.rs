@@ -29,7 +29,7 @@ pub fn validate(parse : &Cli)
                         Ok(exist) => {
                             if exist
                             {
-                                println!("User already exist");
+                                println!("User already exist!");
                                 return;
                             }
                         }
@@ -78,6 +78,21 @@ pub fn validate(parse : &Cli)
                     println!("Please reboot the Sailbox to initialize the user complete!")
                 },
                 Some(User::Delete {username}) => {
+
+                    match users::exits_user(&username) {
+                        Ok(exist) => {
+                            if !exist
+                            {
+                                println!("User does not exist!");
+                                return;
+                            }
+                        }
+                        Err(e) => {
+                            println!("{}", e);
+                            return;
+                        }
+                    }
+
                     match users::delete_user(&username) {
                         Ok(_) => println!("Successfully delete user!"),
                         Err(e) => {
@@ -85,6 +100,7 @@ pub fn validate(parse : &Cli)
                             return;
                         }
                     }
+
                     println!("Please reboot the Sailbox to remove the user complete!")
                 },
                 None => {
