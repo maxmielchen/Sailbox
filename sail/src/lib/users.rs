@@ -1,4 +1,3 @@
-use std::fmt::format;
 use std::process::{Command, Stdio};
 use std::io::Write;
 use std::fs;

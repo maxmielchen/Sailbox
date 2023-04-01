@@ -1,4 +1,6 @@
+use std::io;
 use crate::cli::dsl::{Cli, Project, Tool, User};
+use crate::lib;
 use crate::lib::projects;
 use crate::lib::users;
 
@@ -10,20 +12,42 @@ pub fn validate(parse : &Cli)
             match user
             {
                 Some(User::Create { username, password, root, sudo})  => {
-                    match users::add_user(&username, &password) {
+
+                    let mut username_encoded = String::new();
+                    let mut password_encoded = String::new();
+
+                    match &username {
+                        None => {
+                            username_encoded = lib::console::native::read_input("Username: ").unwrap()
+                        }
+                        _ => {
+                            username_encoded = username.clone().unwrap();
+                        }
+                    }
+
+                    match &password {
+                        None => {
+                            password_encoded = lib::console::native::read_hidden("Password: ").unwrap();
+                        }
+                        _ => {
+                            password_encoded = password.clone().unwrap();
+                        }
+                    }
+
+                    match users::add_user(&username_encoded, &password_encoded) {
                         Ok(_) => println!("Successfully create user!"),
                         Err(e) => println!("{}", e)
                     }
                     if *root
                     {
-                        match users::root_user(&username) {
+                        match users::root_user(&username_encoded) {
                             Ok(_) => println!("Successfully rooting user!"),
                             Err(e) => println!("{}", e)
                         }
                     }
                     if *sudo
                     {
-                        match users::sudo_user(&username) {
+                        match users::sudo_user(&username_encoded) {
                             Ok(_) => println!("Successfully give user sudo access!"),
                             Err(e) => println!("{}", e)
                         }
