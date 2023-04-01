@@ -87,6 +87,11 @@ pub fn add_user(username : &String, password: &String) -> Result<(), &'static st
 
 pub fn root_user(username : &String) -> Result<(), &'static str>
 {
+    if !exits_user(username).unwrap()
+    {
+        return Err("User does not exist!")
+    }
+
     match Command::new("usermod")
         .arg("-G")
         .arg("root")
@@ -100,6 +105,11 @@ pub fn root_user(username : &String) -> Result<(), &'static str>
 
 pub fn sudo_user(username : &String) -> Result<(), &'static str>
 {
+    if !exits_user(username).unwrap()
+    {
+        return Err("User does not exist!")
+    }
+
     match Command::new("usermod")
         .arg("-aG")
         .arg("sudo")
@@ -113,6 +123,11 @@ pub fn sudo_user(username : &String) -> Result<(), &'static str>
 
 pub fn delete_user(username : &String) -> Result<(), &'static str>
 {
+    if !exits_user(username).unwrap()
+    {
+        return Err("User does not exist!")
+    }
+
     match Command::new("deluser")
         .arg("--remove-home")
         .arg(&username)
