@@ -43,11 +43,11 @@ pub enum User
     Create
     {
         /// Your username
-        #[arg(short, long)]
+        #[arg(short, long, required = false)]
         username : String,
 
         /// Your password
-        #[arg(short, long)]
+        #[arg(short, long, required = false)]
         password : String,
 
         /// Root rights
