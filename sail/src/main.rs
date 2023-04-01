@@ -9,5 +9,6 @@ use clap::Parser;
 fn main()
 {
     let cli = Cli::parse();
+
     validate(&cli)
 }

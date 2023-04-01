@@ -8,7 +8,7 @@ use clap::Parser;
 pub struct Cli
 {
     #[command(subcommand)]
-    tool : Tool,
+    pub tool : Option<Tool>,
 }
 
 #[derive(Subcommand)]
@@ -18,20 +18,22 @@ pub enum Tool
     User
     {
         #[command(subcommand)]
-        user : User,
+        user : Option<User>,
     },
 
     Project
     {
         #[command(subcommand)]
-        project : Project,
+        project : Option<Project>,
     },
 
+    /* Not implemented yet
     Module
     {
         #[command(subcommand)]
-        module : Module,
+        module : Option<Module>,
     }
+    */
 }
 
 #[derive(Subcommand)]
@@ -92,7 +94,7 @@ pub enum Project
     }
 }
 
-
+/* Not implemented yet
 #[derive(Subcommand)]
 #[command()]
 pub enum Module
@@ -113,3 +115,4 @@ pub enum Module
 
     Update
 }
+ */

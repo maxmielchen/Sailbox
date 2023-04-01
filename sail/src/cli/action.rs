@@ -4,49 +4,62 @@ use crate::lib::users;
 
 pub fn validate(parse : &Cli)
 {
-    match &parse.command
+    match &parse.tool
     {
-        Some(User::Create { username, password, root, sudo})  => {
-            match users::add_user(&username, &password) {
-                Ok(_) => println!("Successfully create user!"),
-                Err(e) => println!(e)
-            }
-            if root
+        Some(Tool::User {user}) => {
+            match user
             {
-                match users::root_user(&username) {
-                    Ok(_) => println!("Successfully rooting user!"),
-                    Err(e) => println!(e)
-                }
-            }
-            if sudo
-            {
-                match users::sudo_user(&username) {
-                    Ok(_) => println!("Successfully give user sudo access!"),
-                    Err(e) => println!(e)
+                Some(User::Create { username, password, root, sudo})  => {
+                    match users::add_user(&username, &password) {
+                        Ok(_) => println!("Successfully create user!"),
+                        Err(e) => println!("{}", e)
+                    }
+                    if *root
+                    {
+                        match users::root_user(&username) {
+                            Ok(_) => println!("Successfully rooting user!"),
+                            Err(e) => println!("{}", e)
+                        }
+                    }
+                    if *sudo
+                    {
+                        match users::sudo_user(&username) {
+                            Ok(_) => println!("Successfully give user sudo access!"),
+                            Err(e) => println!("{}", e)
+                        }
+                    }
+                    println!("Please reboot the Sailbox to initialize the user complete!")
+                },
+                Some(User::Delete {username}) => {
+                    match users::delete_user(&username) {
+                        Ok(_) => println!("Successfully delete user!"),
+                        Err(e) => println!("{}", e)
+                    }
+                    println!("Please reboot the Sailbox to remove the user complete!")
+                },
+                None => {
+                    println!("Too few arguments use # sail user --help")
                 }
             }
         },
-        Some(User::Delete {username}) => {
-            match users::delete_user(&username) {
-                Ok(_) => println!("Successfully delete user!"),
-                Err(e) => println!(e)
+        Some(Tool::Project {project}) => {
+            match project {
+                Some(Project::Create {owner, name}) => {
+                    projects::add_project(&owner, &name);
+                    println!("Successfully create project!");
+                }
+
+                Some(Project::Delete {owner, name}) => {
+                    projects::remove_project(&owner, &name);
+                    println!("Successfully delete project!")
+                }
+                None => {
+                    println!("Too few arguments use # sail project --help")
+                }
             }
         },
-
-        Some(Project::Create {owner, name}) => {
-            match projects::add_project(&owner, &name) {
-                Ok(_) => println!("Successfully create project!"),
-                Err(e) => println!(e)
-            }
+        None => {
+            println!("Too few arguments use # sail --help")
         }
-
-        Some(Project::Delete {owner, name}) => {
-            match projects::remove_project(&owner, &name) {
-                Ok(_) => println!("Successfully delete project!"),
-                Err(e) => println!(e)
-            }
-        }
-
-        None => {}
     }
 }
