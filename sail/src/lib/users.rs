@@ -21,6 +21,11 @@ pub fn exits_user(username : &String) -> Result<bool, &'static str>
 
 pub fn add_user(username : &String, password: &String) -> Result<(), &'static str>
 {
+    if exits_user(username).unwrap()
+    {
+        return Err("User already exist!")
+    }
+
     // Add user
     match Command::new("adduser")
         .arg("--disabled-password")
