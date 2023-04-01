@@ -42,15 +42,14 @@ pub fn add_user(username : &String, password: &String) -> Result<(), &'static st
                 .output().unwrap();
             return Err("Could not create user!")
         }
-    }
-    ;
+    };
 
     // Add user to ssh config
     Command::new("echo")
         .arg(format!("\"AllowUsers {}\"", &username))
         .arg(">>")
         .arg("/etc/ssh/sshd_config")
-    ;
+        .output().unwrap();
 
     // Add project dir
     fs::create_dir(format!("/home/{}/projects", &username)).unwrap();
