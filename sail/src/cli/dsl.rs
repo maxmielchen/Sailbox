@@ -44,11 +44,11 @@ pub enum User
     {
         /// Your username
         #[arg(short, long, required = false)]
-        username : String,
+        username : Option<String>,
 
         /// Your password
         #[arg(short, long, required = false)]
-        password : String,
+        password : Option<String>,
 
         /// Root rights
         #[arg(short, long, default_value_t = false)]
