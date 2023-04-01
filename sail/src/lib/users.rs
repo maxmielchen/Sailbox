@@ -2,6 +2,23 @@ use std::process::{Command, Stdio};
 use std::io::Write;
 use std::fs;
 
+pub fn exits_user(username : &String) -> Result<bool, &'static str>
+{
+    let output = Command::new("id")
+        .arg("-u")
+        .arg(&username)
+        .output();
+    return match &output
+    {
+        Ok(_) => {
+            Ok(*&output.unwrap().status.success())
+        }
+        Err(_) => {
+            Err("Could not check if user exist")
+        }
+    }
+}
+
 pub fn add_user(username : &String, password: &String) -> Result<(), &'static str>
 {
     // Add user
