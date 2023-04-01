@@ -1,5 +1,6 @@
 use std::io;
 use crate::cli::dsl::{Cli, Project, Tool, User};
+use crate::lib;
 use crate::lib::projects;
 use crate::lib::users;
 
@@ -12,43 +13,41 @@ pub fn validate(parse : &Cli)
             {
                 Some(User::Create { username, password, root, sudo})  => {
 
-                    let mut usernameEncoded = String::new();
-                    let mut passwordEncoded = String::new();
+                    let mut username_encoded = String::new();
+                    let mut password_encoded = String::new();
 
                     match &username {
                         None => {
-                            print!("Username: ");
-                            io::stdin().read_line(&mut usernameEncoded).unwrap();
+                            username_encoded = lib::console::native::read_input("Username: ").unwrap()
                         }
                         _ => {
-                            usernameEncoded = username.clone().unwrap();
+                            username_encoded = username.clone().unwrap();
                         }
                     }
 
                     match &password {
                         None => {
-                            print!("Password: ");
-                            io::stdin().read_line(&mut passwordEncoded).unwrap();
+                            password_encoded = lib::console::native::read_hidden("Password: ").unwrap();
                         }
                         _ => {
-                            passwordEncoded = password.clone().unwrap();
+                            password_encoded = password.clone().unwrap();
                         }
                     }
 
-                    match users::add_user(&usernameEncoded, &passwordEncoded) {
+                    match users::add_user(&username_encoded, &password_encoded) {
                         Ok(_) => println!("Successfully create user!"),
                         Err(e) => println!("{}", e)
                     }
                     if *root
                     {
-                        match users::root_user(&usernameEncoded) {
+                        match users::root_user(&username_encoded) {
                             Ok(_) => println!("Successfully rooting user!"),
                             Err(e) => println!("{}", e)
                         }
                     }
                     if *sudo
                     {
-                        match users::sudo_user(&usernameEncoded) {
+                        match users::sudo_user(&username_encoded) {
                             Ok(_) => println!("Successfully give user sudo access!"),
                             Err(e) => println!("{}", e)
                         }
