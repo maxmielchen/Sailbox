@@ -109,6 +109,7 @@ pub enum Module
         /// The module name
         #[arg(short, long)]
         name : String,
-    }
-}
+    },
 
+    Update
+}
