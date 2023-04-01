@@ -79,7 +79,18 @@ pub fn validate(parse : &Cli)
                 },
                 Some(User::Delete {username}) => {
 
-                    match users::exits_user(&username) {
+                    let mut username_encoded = String::new();
+
+                    match &username {
+                        None => {
+                            username_encoded = lib::console::native::read_input("Username: ").unwrap()
+                        }
+                        _ => {
+                            username_encoded = username.clone().unwrap();
+                        }
+                    }
+
+                    match users::exits_user(&username_encoded) {
                         Ok(exist) => {
                             if !exist
                             {
@@ -93,7 +104,7 @@ pub fn validate(parse : &Cli)
                         }
                     }
 
-                    match users::delete_user(&username) {
+                    match users::delete_user(&username_encoded) {
                         Ok(_) => println!("Successfully delete user!"),
                         Err(e) => {
                             println!("{}", e);
