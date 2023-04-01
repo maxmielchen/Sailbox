@@ -45,10 +45,9 @@ pub fn add_user(username : &String, password: &String) -> Result<(), &'static st
     };
 
     // Add user to ssh config
-    Command::new("echo")
-        .arg(format!("\"AllowUsers {}\"", &username))
-        .arg(">>")
-        .arg("/etc/ssh/sshd_config")
+    Command::new("sh")
+        .arg("-c")
+        .arg(format!("echo \"AllowUsers {}\" >> /etc/ssh/sshd_config", &username))
         .output().unwrap();
 
     // Add project dir
