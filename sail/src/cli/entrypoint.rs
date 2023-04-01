@@ -25,6 +25,12 @@ pub enum Tool
     {
         #[command(subcommand)]
         project : Project,
+    },
+
+    Module
+    {
+        #[command(subcommand)]
+        module : Module,
     }
 }
 
@@ -81,6 +87,26 @@ pub enum Project
         owner : String,
 
         /// The dir/project name
+        #[arg(short, long)]
+        name : String,
+    }
+}
+
+
+#[derive(Subcommand)]
+#[command()]
+pub enum Module
+{
+    Add
+    {
+        /// The module name
+        #[arg(short, long)]
+        name : String,
+    },
+
+    Remove
+    {
+        /// The module name
         #[arg(short, long)]
         name : String,
     }
