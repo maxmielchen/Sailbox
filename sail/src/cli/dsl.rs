@@ -62,8 +62,8 @@ pub enum User
     Delete
     {
         /// Your username
-        #[arg(short, long)]
-        username : String,
+        #[arg(short, long, required = false)]
+        username : Option<String>,
     }
 }
 
