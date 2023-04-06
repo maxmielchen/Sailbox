@@ -31,5 +31,5 @@ docker exec -it box sail user create --username OUR_USERNAME --password OUR_PASS
 
 Restart instance
 ```Bash
-docker start box
+docker restart box
 ```
