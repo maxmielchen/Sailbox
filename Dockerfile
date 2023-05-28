@@ -15,6 +15,7 @@ RUN cp /sail/target/release/sail /usr/local/sbin/
 
 # -- SAILBOX -- #
 FROM ubuntu:jammy
+RUN unminimize
 
 # -- Configuration -- #
 
