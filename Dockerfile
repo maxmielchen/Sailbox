@@ -40,9 +40,6 @@ RUN echo \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 RUN apt update -y
 RUN apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-RUN groupadd docker
-RUN chmod 666 /var/run/docker.sock
-RUN chgrp docker /var/run/docker.sock
 
 # Install Packages
 RUN apt update -y
