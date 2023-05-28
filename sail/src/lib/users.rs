@@ -82,6 +82,13 @@ pub fn add_user(username : &String, password: &String) -> Result<(), &'static st
         .arg(format!("/home/{}", &username))
         .output().unwrap();
 
+    // Give user docker rights
+    Command::new("usermod")
+        .arg("-aG")
+        .arg("docker")
+        .arg(&username)
+        .output().unwrap();
+
     return Ok(())
 }
 
