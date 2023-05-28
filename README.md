@@ -21,7 +21,7 @@ docker pull ghcr.io/maxmielchen/sailbox:latest && docker image tag ghcr.io/maxmi
 
 Run instance
 ```Bash
-docker run --name box -p 201:22 -d sailbox:latest
+docker run --name box -p 201:22 -v /var/run/docker.sock:/var/run/docker.sock -d sailbox:latest
 ```
 
 Add user
