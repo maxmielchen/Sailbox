@@ -30,6 +30,7 @@ RUN apt update -y && apt install sudo -y
 
 # Install Packages
 RUN apt update -y
+RUN apt install docker.io -y
 RUN apt install git -y
 RUN apt install vim -y
 RUN apt install neovim -y
