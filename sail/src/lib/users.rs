@@ -84,7 +84,7 @@ pub fn add_user(username : &String, password: &String) -> Result<(), &'static st
 
     // Give user docker rights
     Command::new("usermod")
-        .arg("-G")
+        .arg("-aG")
         .arg("docker")
         .arg(&username)
         .output().unwrap();
