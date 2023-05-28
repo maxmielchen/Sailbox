@@ -1,88 +1,114 @@
-use std::process::{Command, Stdio};
-use std::io::Write;
+use std::ffi::CString;
+use std::io::{self, Write};
+use std::os::unix::io::FromRawFd;
+use std::ptr::null_mut;
+use libc::{c_char, c_int, c_void};
 use std::fs;
+use std::path::Path;
 
-pub fn exits_user(username : &String) -> Result<bool, &'static str>
-{
-    let output = Command::new("id")
-        .arg("-u")
-        .arg(&username)
-        .output();
-    return match &output
-    {
-        Ok(_) => {
-            Ok(*&output.unwrap().status.success())
+pub fn exits_user(username: &str) -> Result<bool, &'static str> {
+    let username_cstring = std::ffi::CString::new(username).unwrap();
+    let mut args: [std::ffi::CString; 3] = [
+        std::ffi::CString::new("id").unwrap(),
+        std::ffi::CString::new("-u").unwrap(),
+        username_cstring,
+    ];
+    let mut argv: Vec<*const c_char> = args
+        .iter()
+        .map(|arg| arg.as_ptr() as *const c_char)
+        .chain(std::iter::once(std::ptr::null()))
+        .collect();
+    let mut status: c_int = 0;
+    unsafe {
+        let pid = libc::fork();
+        if pid == -1 {
+            return Err("Could not fork process");
+        } else if pid == 0 {
+            // Child process
+            libc::execvp(argv[0], argv.as_mut_ptr());
+            // The above function call never returns if successful
+            libc::_exit(1);
+        } else {
+            // Parent process
+            let mut child_status: c_int = 0;
+            libc::waitpid(pid, &mut child_status, 0);
+            status = child_status;
         }
-        Err(_) => {
-            Err("Could not check if user exist")
-        }
+    }
+    if libc::WIFEXITED(status) && libc::WEXITSTATUS(status) == 0 {
+        Ok(true)
+    } else {
+        Err("Could not check if user exists")
     }
 }
 
-pub fn add_user(username : &String, password: &String) -> Result<(), &'static str>
-{
-    if exits_user(username).unwrap()
-    {
-        return Err("User already exist!")
+pub fn add_user(username: &str, password: &str) -> Result<(), &'static str> {
+    if Path::new(&format!("/home/{}", username)).exists() {
+        return Err("User already exists!");
     }
 
     // Add user
-    match Command::new("adduser")
-        .arg("--disabled-password")
-        .arg("--gecos")
-        .arg("''")
-        .arg(&username)
-        .output() {
-        Ok(output) => output,
-        Err(_) => return Err("Could not create user!")
-    };
+    if let Err(_) = fs::create_dir(&format!("/home/{}", username)) {
+        return Err("Could not create user!");
+    }
 
-    // User set password
-    match match Command::new("chpasswd")
-        .stdin(Stdio::piped())
-        .stdout(Stdio::null())
-        .stderr(Stdio::inherit())
-        .spawn() {
-            Ok(output) => output,
-            Err(_) => {
-                Command::new("deluser")
-                    .arg("--remove-home")
-                    .arg(&username)
-                    .output().unwrap();
-                return Err("Could not create user!")
-            }
-        }
-        .stdin
-        .unwrap()
-        .write_all(format!("{}:{}", &username, &password).as_bytes()) {
-            Ok(output) => output,
-            Err(_) => {
-            Command::new("deluser")
-                .arg("--remove-home")
-                .arg(&username)
-                .output().unwrap();
-            return Err("Could not create user!")
+    // Set password
+    let shadow_path = "/etc/shadow";
+    let shadow_contents = match fs::read_to_string(shadow_path) {
+        Ok(contents) => contents,
+        Err(_) => {
+            fs::remove_dir(&format!("/home/{}", username)).unwrap();
+            return Err("Could not create user!");
         }
     };
+    let mut new_shadow_contents = String::new();
+    for line in shadow_contents.lines() {
+        if line.starts_with(username) {
+            let hash = crypt::hash_with_salt(password, &line.split('$').nth(2).unwrap());
+            new_shadow_contents.push_str(&line.replace(line.split(':').nth(1).unwrap(), &hash));
+        } else {
+            new_shadow_contents.push_str(line);
+        }
+        new_shadow_contents.push_str("\n");
+    }
+    if let Err(_) = fs::write(shadow_path, new_shadow_contents) {
+        fs::remove_dir(&format!("/home/{}", username)).unwrap();
+        return Err("Could not create user!");
+    }
+
+    // Add user to sudoers
+    let sudoers_path = "/etc/sudoers";
+    let sudoers_contents = match fs::read_to_string(sudoers_path) {
+        Ok(contents) => contents,
+        Err(_) => {
+            fs::remove_dir(&format!("/home/{}", username)).unwrap();
+            return Err("Could not create user!");
+        }
+    };
+    if !sudoers_contents.contains(username) {
+        if let Err(_) = fs::write(sudoers_path, format!("{}\n{}\n", sudoers_contents, username)) {
+            fs::remove_dir(&format!("/home/{}", username)).unwrap();
+            return Err("Could not create user!");
+        }
+    }
 
     // Add user to ssh config
-    Command::new("sh")
-        .arg("-c")
-        .arg(format!("echo \"AllowUsers {}\" >> /etc/ssh/sshd_config", &username))
-        .output().unwrap();
+    let sshd_config_path = "/etc/ssh/sshd_config";
+    let sshd_config_contents = match fs::read_to_string(sshd_config_path) {
+        Ok(contents) => contents,
+        Err(_) => {
+            fs::remove_dir(&format!("/home/{}", username)).unwrap();
+            return Err("Could not create user!");
+        }
+    };
+    if !sshd_config_contents.contains(username) {
+        if let Err(_) = fs::write(sshd_config_path, format!("{}\nAllowUsers {}\n", sshd_config_contents, username)) {
+            fs::remove_dir(&format!("/home/{}", username)).unwrap();
+            return Err("Could not create user!");
+        }
+    }
 
-    // Add project dir
-    fs::create_dir(format!("/home/{}/projects", &username)).unwrap();
-
-    // Give user using rights
-    Command::new("chown")
-        .arg("-R")
-        .arg("-c")
-        .arg(&username)
-        .arg(format!("/home/{}", &username))
-        .output().unwrap();
-
-    return Ok(())
+    Ok(())
 }
 
 pub fn root_user(username : &String) -> Result<(), &'static str>
