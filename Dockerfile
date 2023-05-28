@@ -14,7 +14,7 @@ RUN cp /sail/target/release/sail /usr/local/sbin/
 
 
 # -- SAILBOX -- #
-FROM ubuntu:mantic
+FROM ubuntu:lunar
 
 # -- Configuration -- #
 
