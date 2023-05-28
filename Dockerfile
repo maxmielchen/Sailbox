@@ -15,7 +15,8 @@ RUN cp /sail/target/release/sail /usr/local/sbin/
 
 # -- SAILBOX -- #
 FROM ubuntu:jammy
-RUN unminimize
+ENV DEBIAN_FRONTEND noninteractive
+RUN yes | unminimize
 
 # -- Configuration -- #
 
@@ -45,6 +46,7 @@ RUN apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docke
 # Install Packages
 RUN apt update -y
 RUN apt install git -y
+RUN apt install gh -y
 RUN apt install vim -y
 RUN apt install neovim -y
 RUN apt install nano -y
