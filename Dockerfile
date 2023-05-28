@@ -67,4 +67,6 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # -- Setup -- #
 EXPOSE 22
+VOLUME [ "/var/run/docker.sock" ]
+VOLUME [ "/home" ]
 ENTRYPOINT ["/entrypoint.sh"]
