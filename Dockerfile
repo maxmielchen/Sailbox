@@ -1,21 +1,6 @@
-# -- SAIL-CLI -- #
-FROM rustlang/rust:nightly AS sailcli
-
-# Mirror source
-COPY /sail /sail
-
-# Build source
-WORKDIR /sail
-RUN cargo build --release
-
-# Place Unix Executable
-RUN cp /sail/target/release/sail /usr/local/sbin/
-
-
-
 # -- SAILBOX -- #
 FROM ubuntu:jammy
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN yes | unminimize
 
 # -- Configuration -- #
@@ -55,10 +40,6 @@ RUN apt install curl -y
 # Load entrypoint
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
-
-# Sail-CLI
-COPY --from=sailcli /usr/local/sbin/sail /usr/local/sbin/
-RUN chmod +x /usr/local/sbin/sail
 
 
 # -- Post -- #
