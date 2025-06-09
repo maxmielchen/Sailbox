@@ -1,10 +1,12 @@
 #!/bin/bash
 # sail-bash: Alternative zu sail in Bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Module einbinden
-. "$(dirname "$0")/cli/dsl.sh"
-. "$(dirname "$0")/cli/action.sh"
-. "$(dirname "$0")/lib/users.sh"
+. "$SCRIPT_DIR/cli/dsl.sh"
+. "$SCRIPT_DIR/cli/action.sh"
+. "$SCRIPT_DIR/lib/users.sh"
 
 show_help() {
   echo "sail-bash user create [--username USER] [--password PASS] [-r] [-s]"

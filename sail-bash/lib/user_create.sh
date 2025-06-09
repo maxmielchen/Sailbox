@@ -1,5 +1,6 @@
 # lib/user_create.sh
-. "$(dirname "$0")/helpers.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/helpers.sh"
 
 user_create() {
   # ...Argumente parsen wie gehabt...

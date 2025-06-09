@@ -1,7 +1,8 @@
 # lib/users.sh
-. "$(dirname "$0")/user_create.sh"
-. "$(dirname "$0")/user_delete.sh"
-. "$(dirname "$0")/helpers.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/user_create.sh"
+. "$SCRIPT_DIR/user_delete.sh"
+. "$SCRIPT_DIR/helpers.sh"
 
 # Fassade für Kompatibilität
 # user_create und user_delete werden direkt importiert
