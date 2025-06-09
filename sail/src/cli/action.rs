@@ -11,8 +11,8 @@ pub fn validate(parse : &Cli)
             {
                 Some(User::Create { username, password, root, sudo})  => {
 
-                    let mut username_encoded = String::new();
-                    let mut password_encoded = String::new();
+                    let username_encoded;
+                    let password_encoded;
 
                     match &username {
                         None => {
@@ -77,7 +77,7 @@ pub fn validate(parse : &Cli)
                 },
                 Some(User::Delete {username}) => {
 
-                    let mut username_encoded = String::new();
+                    let username_encoded;
 
                     match &username {
                         None => {
