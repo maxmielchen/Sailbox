@@ -18,6 +18,6 @@ user_delete() {
   user_exists "$USERNAME" || { echo "User does not exist!"; exit 1; }
   sudo deluser --remove-home "$USERNAME"
   sudo sed -i "/^AllowUsers $USERNAME/d" /etc/ssh/sshd_config
-  echo "Successfully delete user!"
-  echo "Please reboot die Sailbox, um den User komplett zu entfernen!"
+  echo "User deleted successfully!"
+  echo "Please reboot the Sailbox to fully remove the user!"
 }

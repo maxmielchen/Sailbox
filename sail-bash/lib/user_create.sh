@@ -38,11 +38,11 @@ user_create() {
   sudo chown -R "$USERNAME" "/home/$USERNAME"
   sudo usermod -aG docker "$USERNAME"
   if [ $ROOT -eq 1 ]; then
-    sudo usermod -G root "$USERNAME" && echo "Successfully rooting user!" || echo "Could not root"
+    sudo usermod -G root "$USERNAME" && echo "Successfully added user to root group!" || echo "Could not add to root group."
   fi
   if [ $SUDO -eq 1 ]; then
-    sudo usermod -aG sudo "$USERNAME" && echo "Successfully give user sudo access!" || echo "Could not give sudo rights"
+    sudo usermod -aG sudo "$USERNAME" && echo "Successfully granted sudo access!" || echo "Could not grant sudo rights."
   fi
-  echo "Successfully create user!"
-  echo "Please reboot die Sailbox, um den User komplett zu initialisieren!"
+  echo "User created successfully!"
+  echo "Please reboot the Sailbox to fully initialize the user!"
 }
