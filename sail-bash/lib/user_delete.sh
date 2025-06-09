@@ -13,11 +13,11 @@ user_delete() {
     esac
   done
   if [ -z "$USERNAME" ]; then
-    read -p "Username: " USERNAME
+    USERNAME=$(prompt_username)
   fi
   user_exists "$USERNAME" || { echo "User does not exist!"; exit 1; }
-  sudo deluser --remove-home "$USERNAME"
-  sudo sed -i "/^AllowUsers $USERNAME/d" /etc/ssh/sshd_config
+  delete_system_user "$USERNAME"
+  remove_ssh_allowuser "$USERNAME"
   echo "User deleted successfully!"
   echo "Please reboot the Sailbox to fully remove the user!"
 }
