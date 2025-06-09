@@ -16,7 +16,7 @@ docker pull ghcr.io/maxmielchen/sailbox:latest && docker image tag ghcr.io/maxmi
 
 Pull from main
 ```Bash
-docker pull ghcr.io/maxmielchen/sailbox:latest && docker image tag ghcr.io/maxmielchen/sailbox:main sailbox:latest
+docker pull ghcr.io/maxmielchen/sailbox:main && docker image tag ghcr.io/maxmielchen/sailbox:main sailbox:latest
 ```
 
 Run instance
