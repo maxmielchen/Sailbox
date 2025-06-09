@@ -36,6 +36,7 @@ RUN apt install vim -y
 RUN apt install neovim -y
 RUN apt install nano -y
 RUN apt install curl -y
+RUN apt install htop -y
 
 # Load entrypoint
 COPY entrypoint.sh /

@@ -23,7 +23,7 @@ Sailbox is a Docker image that simplifies setting up a remote development enviro
 - SSH server out-of-the-box
 - User management (CRUD) via the `sail` Bash CLI
 - Docker-in-Docker support
-- Preinstalled: Git, Vim, Neovim, Nano, curl, gh
+- Preinstalled: Git, Vim, Neovim, Nano, curl, gh, htop
 
 ---
 
