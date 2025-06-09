@@ -40,6 +40,9 @@ RUN apt install curl -y
 # Load entrypoint
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
+COPY sail-bash /sail-bash
+RUN chmod +x /sail-bash/sail-bash.sh \
+    && ln -s /sail-bash/sail-bash.sh /usr/local/bin/sail
 
 
 # -- Post -- #
