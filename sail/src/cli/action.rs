@@ -1,7 +1,5 @@
-use std::io;
-use crate::cli::dsl::{Cli, Project, Tool, User};
+use crate::cli::dsl::{Cli, Tool, User};
 use crate::lib;
-use crate::lib::projects;
 use crate::lib::users;
 
 pub fn validate(parse : &Cli)
@@ -116,22 +114,6 @@ pub fn validate(parse : &Cli)
                 },
                 None => {
                     println!("Too few arguments use # sail user --help")
-                }
-            }
-        },
-        Some(Tool::Project {project}) => {
-            match project {
-                Some(Project::Create {owner, name}) => {
-                    projects::add_project(&owner, &name);
-                    println!("Successfully create project!");
-                }
-
-                Some(Project::Delete {owner, name}) => {
-                    projects::remove_project(&owner, &name);
-                    println!("Successfully delete project!")
-                }
-                None => {
-                    println!("Too few arguments use # sail project --help")
                 }
             }
         },
