@@ -4,4 +4,5 @@ LogLevel INFO
 UsePAM yes
 X11Forwarding yes
 PrintMotd no
+PasswordAuthentication yes
 Subsystem       sftp    /usr/lib/openssh/sftp-server
