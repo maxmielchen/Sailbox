@@ -39,10 +39,13 @@ RUN apt install curl -y
 
 # Load entrypoint
 COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
 COPY sail-bash /sail-bash
-RUN chmod +x /sail-bash/sail-bash.sh \
-    && ln -s /sail-bash/sail-bash.sh /usr/local/bin/sail
+RUN chmod +x /sail-bash/sail-bash.sh
+COPY etc/ssh/sshd_config /etc/ssh/
+# Wrapper-Skript für /usr/local/bin/sail
+RUN echo '#!/bin/bash\nexec /sail-bash/sail-bash.sh "$@"' > /usr/local/bin/sail \
+    && chmod +x /usr/local/bin/sail
+RUN chmod +x /entrypoint.sh
 
 
 # -- Post -- #
